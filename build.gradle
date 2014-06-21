@@ -1,0 +1,35 @@
+apply plugin: "groovy"
+
+repositories {
+  jcenter()
+  mavenCentral()
+}
+
+ext {
+  versions = [
+    groovy: "2.3.3",
+    jdbi  : "2.55",
+    spock : "0.7-groovy-2.0"
+  ]
+}
+
+dependencies {
+  compile "org.jdbi:jdbi:$versions.jdbi"
+  testCompile "org.codehaus.groovy:groovy-all:$versions.groovy:indy"
+  testCompile "org.spockframework:spock-core:$versions.spock"
+}
+
+plugins.withType(JavaPlugin) {
+  sourceCompatibility = "1.8"
+  targetCompatibility = "1.8"
+}
+
+tasks.withType(GroovyCompile) {
+  groovyOptions.optimizationOptions.indy = true
+}
+
+configurations.all {
+  resolutionStrategy {
+    force "org.codehaus.groovy:groovy-all:$versions.groovy:indy"
+  }
+}
