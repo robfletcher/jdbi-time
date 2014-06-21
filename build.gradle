@@ -13,10 +13,15 @@ ext {
   ]
 }
 
+configurations {
+  asciidoclet
+}
+
 dependencies {
   compile "org.jdbi:jdbi:$versions.jdbi"
   testCompile "org.codehaus.groovy:groovy-all:$versions.groovy:indy"
   testCompile "org.spockframework:spock-core:$versions.spock"
+  asciidoclet "org.asciidoctor:asciidoclet:0.+"
 }
 
 plugins.withType(JavaPlugin) {
@@ -32,4 +37,9 @@ configurations.all {
   resolutionStrategy {
     force "org.codehaus.groovy:groovy-all:$versions.groovy:indy"
   }
+}
+
+javadoc {
+  options.docletpath = configurations.asciidoclet.files.asType(List)
+  options.doclet = "org.asciidoctor.Asciidoclet"
 }
