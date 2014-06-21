@@ -16,39 +16,18 @@
 
 package co.freeside.jdbi.time
 
-import java.time.LocalDate
+import java.sql.Timestamp
 import org.skife.jdbi.v2.tweak.ResultSetMapper
+import org.skife.jdbi.v2.util.TimestampMapper
 
-class LocalDateSpec extends MapsToStringSpecification<LocalDate> {
-
-  def setup() {
-    handle.with {
-      registerArgumentFactory new LocalDateArgumentFactory()
-    }
+abstract class MapsToTimestampSpecification<Target> extends BaseSpecification<Target, Timestamp> {
+  @Override
+  protected final String columnSqlType() {
+    "timestamp"
   }
 
   @Override
-  protected Class<LocalDate> targetType() {
-    LocalDate
-  }
-
-  @Override
-  protected ResultSetMapper<LocalDate> targetTypeMapperFor(String name) {
-    new LocalDateMapper(name)
-  }
-
-  @Override
-  protected ResultSetMapper<LocalDate> targetTypeMapperForFirst() {
-    LocalDateMapper.FIRST
-  }
-
-  @Override
-  protected LocalDate targetValue() {
-    LocalDate.now()
-  }
-
-  @Override
-  protected String toColumnType(LocalDate value) {
-    value.toString()
+  protected final ResultSetMapper<Timestamp> columnTypeMapperForFirst() {
+    TimestampMapper.FIRST
   }
 }

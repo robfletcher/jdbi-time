@@ -19,14 +19,12 @@ package co.freeside.jdbi.time
 import java.sql.Timestamp
 import java.time.Instant
 import org.skife.jdbi.v2.tweak.ResultSetMapper
-import org.skife.jdbi.v2.util.TimestampMapper
 
-class InstantSpec extends TypeSpecification<Instant, Timestamp> {
+class InstantSpec extends MapsToTimestampSpecification<Instant> {
 
   def setup() {
     handle.with {
       registerArgumentFactory new InstantArgumentFactory()
-      registerMapper new InstantMapper()
     }
   }
 
@@ -36,23 +34,13 @@ class InstantSpec extends TypeSpecification<Instant, Timestamp> {
   }
 
   @Override
-  protected String columnSqlType() {
-    "timestamp"
-  }
-
-  @Override
-  protected ResultSetMapper<Instant> mapperForColumn(String name) {
+  protected ResultSetMapper<Instant> targetTypeMapperFor(String name) {
     new InstantMapper(name)
   }
 
   @Override
-  protected ResultSetMapper<Instant> mapperForFirstColumn() {
+  protected ResultSetMapper<Instant> targetTypeMapperForFirst() {
     InstantMapper.FIRST
-  }
-
-  @Override
-  protected ResultSetMapper<Timestamp> mapperForSqlTypeFirstColumn() {
-    TimestampMapper.FIRST
   }
 
   @Override
@@ -61,7 +49,7 @@ class InstantSpec extends TypeSpecification<Instant, Timestamp> {
   }
 
   @Override
-  protected Timestamp toSqlType(Instant value) {
+  protected Timestamp toColumnType(Instant value) {
     new Timestamp(value.toEpochMilli())
   }
 }

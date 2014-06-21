@@ -23,27 +23,58 @@ import org.skife.jdbi.v2.DBI
 import org.skife.jdbi.v2.tweak.ResultSetMapper
 import org.skife.jdbi.v2.util.LongMapper
 
+/**
+ * Base for all specifications that test support for individual +java.time+ types.
+ * @param < Target >   the +java.time+ type being tested.
+ * @param < SqlType >   the simple type corresponding to the type of column.
+ */
 @Unroll
-abstract class TypeSpecification<Target, SqlType> extends Specification {
+abstract class BaseSpecification<Target, ColumnType> extends Specification {
 
   @AutoCleanup protected handle = DBI.open("jdbc:h2:mem:test")
 
+  /**
+   * @return the +java.time+ class being tested.
+   */
   protected abstract Class<Target> targetType()
 
+  /**
+   * @return the SQL type of the column.
+   */
   protected abstract String columnSqlType()
 
-  protected abstract ResultSetMapper<Target> mapperForColumn(String name)
+  /**
+   * @param name the column name.
+   * @return a mapper for the named column to the +java.time+ type.
+   */
+  protected abstract ResultSetMapper<Target> targetTypeMapperFor(String name)
 
-  protected abstract ResultSetMapper<Target> mapperForFirstColumn()
+  /**
+   * @return a mapper for the first column to the +java.time+ type.
+   */
+  protected abstract ResultSetMapper<Target> targetTypeMapperForFirst()
 
+  /**
+   * @return an example value.
+   */
   protected abstract Target targetValue()
 
-  protected abstract SqlType toSqlType(Target value)
+  /**
+   * @param value a +java.time+ value
+   * @return the expected representation of +value+ in the database.
+   */
+  protected abstract ColumnType toColumnType(Target value)
 
-  protected abstract ResultSetMapper<SqlType> mapperForSqlTypeFirstColumn()
+  /**
+   * @return a mapper for the basic column type. Used to check the value inserted to the database.
+   */
+  protected abstract ResultSetMapper<ColumnType> columnTypeMapperForFirst()
 
   def setup() {
-    handle.createStatement("create table a_table (id bigint primary key auto_increment, value ${columnSqlType()})").execute()
+    handle.with {
+      registerMapper new TimeTypesMapperFactory()
+      createStatement("create table a_table (id bigint primary key auto_increment, value ${columnSqlType()})").execute()
+    }
   }
 
   def cleanup() {
@@ -57,12 +88,12 @@ abstract class TypeSpecification<Target, SqlType> extends Specification {
     then:
     handle.createQuery(selectByIdSql())
       .bind("id", id)
-      .map(mapperForSqlTypeFirstColumn())
+      .map(columnTypeMapperForFirst())
       .first() == expected
 
     where:
     value = targetValue()
-    expected = toSqlType(value)
+    expected = toColumnType(value)
   }
 
   def "can read a #value.class.simpleName column into an #expected.class.simpleName"() {
@@ -79,7 +110,7 @@ abstract class TypeSpecification<Target, SqlType> extends Specification {
     result == expected
 
     where:
-    value = toSqlType(targetValue())
+    value = toColumnType(targetValue())
     expected = targetValue()
   }
 
@@ -90,14 +121,14 @@ abstract class TypeSpecification<Target, SqlType> extends Specification {
     when:
     def result = handle.createQuery(selectByIdSql())
       .bind("id", id)
-      .map(mapperForColumn("value"))
+      .map(targetTypeMapperFor("value"))
       .first()
 
     then:
     result == expected
 
     where:
-    value = toSqlType(targetValue())
+    value = toColumnType(targetValue())
     expected = targetValue()
   }
 
@@ -108,14 +139,14 @@ abstract class TypeSpecification<Target, SqlType> extends Specification {
     when:
     def result = handle.createQuery(selectByIdSql())
       .bind("id", id)
-      .map(mapperForFirstColumn())
+      .map(targetTypeMapperForFirst())
       .first()
 
     then:
     result == expected
 
     where:
-    value = toSqlType(targetValue())
+    value = toColumnType(targetValue())
     expected = targetValue()
   }
 
