@@ -62,4 +62,46 @@ class InstantSpec extends Specification {
     expected = Instant.ofEpochMilli(value.time)
   }
 
+  def "can read a named Timestamp column into an Instant"() {
+    given:
+    def id = handle.createStatement("insert into a_table (value) values (:value)")
+      .bind("value", value)
+      .executeAndReturnGeneratedKeys(LongMapper.FIRST)
+      .first()
+
+    when:
+    def result = handle.createQuery("select value from a_table where id = :id")
+      .bind("id", id)
+      .map(new InstantMapper("value"))
+      .first()
+
+    then:
+    result == expected
+
+    where:
+    value = new Timestamp(System.currentTimeMillis())
+    expected = Instant.ofEpochMilli(value.time)
+  }
+
+  def "can read an indexed Timestamp column into an Instant"() {
+    given:
+    def id = handle.createStatement("insert into a_table (value) values (:value)")
+      .bind("value", value)
+      .executeAndReturnGeneratedKeys(LongMapper.FIRST)
+      .first()
+
+    when:
+    def result = handle.createQuery("select value from a_table where id = :id")
+      .bind("id", id)
+      .map(InstantMapper.FIRST)
+      .first()
+
+    then:
+    result == expected
+
+    where:
+    value = new Timestamp(System.currentTimeMillis())
+    expected = Instant.ofEpochMilli(value.time)
+  }
+
 }
