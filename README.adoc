@@ -1,3 +1,3 @@
-= jdbi-java-time
+= JDBI Time
 
 Provides support for Java 8's date & time API in http://jdbi.org[JDBI].
