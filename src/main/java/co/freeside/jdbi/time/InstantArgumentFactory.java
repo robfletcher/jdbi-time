@@ -13,27 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package co.freeside.jdbi.jodatime;
+package co.freeside.jdbi.time;
 
-import java.sql.*;
 import java.time.*;
 import org.skife.jdbi.v2.*;
 import org.skife.jdbi.v2.tweak.*;
 
-public class InstantArgument implements Argument {
+public class InstantArgumentFactory implements ArgumentFactory<Instant> {
 
-  private final Instant value;
-
-  InstantArgument(final Instant value) {
-    this.value = value;
+  @Override
+  public boolean accepts(final Class<?> expectedType, final Object value, final StatementContext ctx) {
+    return value instanceof Instant;
   }
 
   @Override
-  public void apply(final int position, final PreparedStatement statement, final StatementContext ctx) throws SQLException {
-    if (value == null) {
-      statement.setNull(position, Types.TIMESTAMP);
-    } else {
-      statement.setTimestamp(position, new Timestamp(value.toEpochMilli()));
-    }
+  public Argument build(final Class<?> expectedType, final Instant value, final StatementContext ctx) {
+    return new InstantArgument(value);
   }
 }
