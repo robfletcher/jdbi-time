@@ -29,4 +29,9 @@ abstract class MapsToStringSpecification<Target> extends BaseSpecification<Targe
   protected final ResultSetMapper<String> columnTypeMapperForFirst() {
     StringMapper.FIRST
   }
+
+    @Override
+    protected String toColumnType(Target value) {
+        value.toString()
+    }
 }

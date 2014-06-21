@@ -16,32 +16,32 @@
 
 package co.freeside.jdbi.time
 
-import java.time.LocalTime
+import java.time.MonthDay
 import org.skife.jdbi.v2.tweak.ResultSetMapper
 
-class LocalTimeSpec extends MapsToStringSpecification<LocalTime> {
+class MonthDaySpec extends MapsToStringSpecification<MonthDay> {
 
     def setup() {
-        handle.registerArgumentFactory new TemporalAsStringArgumentFactory(LocalTime)
+        handle.registerArgumentFactory new TemporalAsStringArgumentFactory(MonthDay)
     }
 
     @Override
-    protected Class<LocalTime> targetType() {
-        LocalTime
+    protected Class<MonthDay> targetType() {
+        MonthDay
     }
 
     @Override
-    protected ResultSetMapper<LocalTime> targetTypeMapperFor(String name) {
-        new LocalTimeMapper(name)
+    protected ResultSetMapper<MonthDay> targetTypeMapperFor(String name) {
+        new MonthDayMapper(name)
     }
 
     @Override
-    protected ResultSetMapper<LocalTime> targetTypeMapperForFirst() {
-        LocalTimeMapper.FIRST
+    protected ResultSetMapper<MonthDay> targetTypeMapperForFirst() {
+        MonthDayMapper.FIRST
     }
 
     @Override
-    protected LocalTime targetValue() {
-        LocalTime.now()
+    protected MonthDay targetValue() {
+        MonthDay.now()
     }
 }

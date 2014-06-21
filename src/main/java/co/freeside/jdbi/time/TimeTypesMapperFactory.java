@@ -16,10 +16,7 @@
 
 package co.freeside.jdbi.time;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.HashMap;
 import java.util.Map;
 import org.skife.jdbi.v2.ResultSetMapperFactory;
@@ -35,6 +32,8 @@ public class TimeTypesMapperFactory implements ResultSetMapperFactory {
     mappers.put(LocalDate.class, new LocalDateMapper());
     mappers.put(LocalDateTime.class, new LocalDateTimeMapper());
     mappers.put(LocalTime.class, new LocalTimeMapper());
+    mappers.put(MonthDay.class, new MonthDayMapper());
+    mappers.put(YearMonth.class, new YearMonthMapper());
   }
 
   public boolean accepts(Class type, StatementContext ctx) {

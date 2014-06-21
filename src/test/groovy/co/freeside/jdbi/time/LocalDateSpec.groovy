@@ -46,9 +46,4 @@ class LocalDateSpec extends MapsToStringSpecification<LocalDate> {
     protected LocalDate targetValue() {
         LocalDate.now()
     }
-
-    @Override
-    protected String toColumnType(LocalDate value) {
-        value.toString()
-    }
 }

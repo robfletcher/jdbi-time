@@ -44,9 +44,4 @@ class LocalDateTimeSpec extends MapsToStringSpecification<LocalDateTime> {
     protected LocalDateTime targetValue() {
         LocalDateTime.now()
     }
-
-    @Override
-    protected String toColumnType(LocalDateTime value) {
-        value.toString()
-    }
 }

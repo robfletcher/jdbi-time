@@ -19,13 +19,13 @@ package co.freeside.jdbi.time;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.Argument;
 
-public class TemporalAsStringArgument<T extends Temporal> implements Argument {
+public class TemporalAsStringArgument<T extends TemporalAccessor> implements Argument {
 
-  public static <T extends Temporal> Argument forType(T type) {
+  public static <T extends TemporalAccessor> Argument of(T type) {
     return new TemporalAsStringArgument<>(type);
   }
 

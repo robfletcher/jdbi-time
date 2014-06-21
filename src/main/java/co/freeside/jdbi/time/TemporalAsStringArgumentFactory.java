@@ -16,12 +16,12 @@
 
 package co.freeside.jdbi.time;
 
-import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.Argument;
 import org.skife.jdbi.v2.tweak.ArgumentFactory;
 
-public class TemporalAsStringArgumentFactory<T extends Temporal> implements ArgumentFactory<T> {
+public class TemporalAsStringArgumentFactory<T extends TemporalAccessor> implements ArgumentFactory<T> {
 
   private final Class<T> temporalType;
 
@@ -36,6 +36,6 @@ public class TemporalAsStringArgumentFactory<T extends Temporal> implements Argu
 
   @Override
   public Argument build(Class<?> expectedType, T value, StatementContext ctx) {
-    return new TemporalAsStringArgument<>(value);
+    return TemporalAsStringArgument.of(value);
   }
 }
