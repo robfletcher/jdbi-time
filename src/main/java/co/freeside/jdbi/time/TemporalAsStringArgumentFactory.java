@@ -21,6 +21,12 @@ import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.Argument;
 import org.skife.jdbi.v2.tweak.ArgumentFactory;
 
+/**
+ * An +ArgumentFactory+ implementation for any +TemporalAccessor+ type that is
+ * represented as a string column on the database.
+ *
+ * @param <T> the specific +TemporalAccessor+ type.
+ */
 public class TemporalAsStringArgumentFactory<T extends TemporalAccessor> implements ArgumentFactory<T> {
 
   private final Class<T> temporalType;

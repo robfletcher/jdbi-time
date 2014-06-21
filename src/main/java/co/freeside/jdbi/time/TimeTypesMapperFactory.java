@@ -19,10 +19,18 @@ package co.freeside.jdbi.time;
 import java.time.*;
 import java.util.HashMap;
 import java.util.Map;
+import org.skife.jdbi.v2.DBI;
+import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.ResultSetMapperFactory;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
+/**
+ * Provides mappers for all supported +java.time+ types.
+ *
+ * @see DBI#registerMapper(ResultSetMapperFactory)
+ * @see Handle#registerMapper(ResultSetMapperFactory)
+ */
 public class TimeTypesMapperFactory implements ResultSetMapperFactory {
 
   private static final Map<Class, ResultSetMapper> mappers = new HashMap<>();
