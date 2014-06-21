@@ -15,9 +15,10 @@
  */
 package co.freeside.jdbi.time;
 
-import java.sql.*;
-import java.time.*;
-import org.skife.jdbi.v2.util.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.Instant;
+import org.skife.jdbi.v2.util.TypedMapper;
 
 public class InstantMapper extends TypedMapper<Instant> {
 

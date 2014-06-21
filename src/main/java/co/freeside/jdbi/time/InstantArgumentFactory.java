@@ -15,9 +15,10 @@
  */
 package co.freeside.jdbi.time;
 
-import java.time.*;
-import org.skife.jdbi.v2.*;
-import org.skife.jdbi.v2.tweak.*;
+import java.time.Instant;
+import org.skife.jdbi.v2.StatementContext;
+import org.skife.jdbi.v2.tweak.Argument;
+import org.skife.jdbi.v2.tweak.ArgumentFactory;
 
 public class InstantArgumentFactory implements ArgumentFactory<Instant> {
 

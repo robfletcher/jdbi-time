@@ -15,10 +15,13 @@
  */
 package co.freeside.jdbi.time;
 
-import java.sql.*;
-import java.time.*;
-import org.skife.jdbi.v2.*;
-import org.skife.jdbi.v2.tweak.*;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
+import java.time.Instant;
+import org.skife.jdbi.v2.StatementContext;
+import org.skife.jdbi.v2.tweak.Argument;
 
 /**
  * Supports the use of +java.time.Instant+ as an argument to a SQL call.
