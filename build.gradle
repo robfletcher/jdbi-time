@@ -5,22 +5,24 @@ repositories {
   mavenCentral()
 }
 
+configurations {
+  asciidoclet
+}
+
 ext {
   versions = [
     groovy: "2.3.3",
+    h2    : "1.4.178",
     jdbi  : "2.55",
     spock : "0.7-groovy-2.0"
   ]
-}
-
-configurations {
-  asciidoclet
 }
 
 dependencies {
   compile "org.jdbi:jdbi:$versions.jdbi"
   testCompile "org.codehaus.groovy:groovy-all:$versions.groovy:indy"
   testCompile "org.spockframework:spock-core:$versions.spock"
+  testRuntime "com.h2database:h2:$versions.h2"
   asciidoclet "org.asciidoctor:asciidoclet:0.+"
 }
 
