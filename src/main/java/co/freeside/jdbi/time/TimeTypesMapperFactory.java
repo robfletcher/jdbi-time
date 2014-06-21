@@ -18,6 +18,8 @@ package co.freeside.jdbi.time;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 import org.skife.jdbi.v2.ResultSetMapperFactory;
@@ -26,18 +28,20 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
 public class TimeTypesMapperFactory implements ResultSetMapperFactory {
 
-    private static final Map<Class, ResultSetMapper> mappers = new HashMap<>();
+  private static final Map<Class, ResultSetMapper> mappers = new HashMap<>();
 
-    static {
-        mappers.put(Instant.class, new InstantMapper());
-        mappers.put(LocalDate.class, new LocalDateMapper());
-    }
+  static {
+    mappers.put(Instant.class, new InstantMapper());
+    mappers.put(LocalDate.class, new LocalDateMapper());
+    mappers.put(LocalDateTime.class, new LocalDateTimeMapper());
+    mappers.put(LocalTime.class, new LocalTimeMapper());
+  }
 
-    public boolean accepts(Class type, StatementContext ctx) {
-        return mappers.containsKey(type);
-    }
+  public boolean accepts(Class type, StatementContext ctx) {
+    return mappers.containsKey(type);
+  }
 
-    public ResultSetMapper mapperFor(Class type, StatementContext ctx) {
-        return mappers.get(type);
-    }
+  public ResultSetMapper mapperFor(Class type, StatementContext ctx) {
+    return mappers.get(type);
+  }
 }

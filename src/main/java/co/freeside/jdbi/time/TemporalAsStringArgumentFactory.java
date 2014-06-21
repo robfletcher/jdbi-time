@@ -16,19 +16,26 @@
 
 package co.freeside.jdbi.time;
 
-import java.time.LocalDate;
+import java.time.temporal.Temporal;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.Argument;
 import org.skife.jdbi.v2.tweak.ArgumentFactory;
 
-public class LocalDateArgumentFactory implements ArgumentFactory<LocalDate> {
-    @Override
-    public boolean accepts(Class<?> expectedType, Object value, StatementContext ctx) {
-        return value instanceof LocalDate;
-    }
+public class TemporalAsStringArgumentFactory<T extends Temporal> implements ArgumentFactory<T> {
 
-    @Override
-    public Argument build(Class<?> expectedType, LocalDate value, StatementContext ctx) {
-        return new LocalDateArgument(value);
-    }
+  private final Class<T> temporalType;
+
+  public TemporalAsStringArgumentFactory(Class<T> temporalType) {
+    this.temporalType = temporalType;
+  }
+
+  @Override
+  public boolean accepts(Class<?> expectedType, Object value, StatementContext ctx) {
+    return temporalType.isAssignableFrom(value.getClass());
+  }
+
+  @Override
+  public Argument build(Class<?> expectedType, T value, StatementContext ctx) {
+    return new TemporalAsStringArgument<>(value);
+  }
 }

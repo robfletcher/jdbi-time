@@ -19,24 +19,27 @@ package co.freeside.jdbi.time;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.time.LocalDate;
+import java.time.temporal.Temporal;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.Argument;
 
-public class LocalDateArgument implements Argument {
+public class TemporalAsStringArgument<T extends Temporal> implements Argument {
 
-    private final LocalDate value;
+  public static <T extends Temporal> Argument forType(T type) {
+    return new TemporalAsStringArgument<>(type);
+  }
 
-    public LocalDateArgument(LocalDate value) {
-        this.value = value;
+  private final T value;
+
+  public TemporalAsStringArgument(T value) {
+    this.value = value;
+  }
+
+  public void apply(int position, PreparedStatement statement, StatementContext ctx) throws SQLException {
+    if (value == null) {
+      statement.setNull(position, Types.VARCHAR);
+    } else {
+      statement.setString(position, value.toString());
     }
-
-    @Override
-    public void apply(int position, PreparedStatement statement, StatementContext ctx) throws SQLException {
-        if (value == null) {
-            statement.setNull(position, Types.CHAR);
-        } else {
-            statement.setString(position, value.toString());
-        }
-    }
+  }
 }
