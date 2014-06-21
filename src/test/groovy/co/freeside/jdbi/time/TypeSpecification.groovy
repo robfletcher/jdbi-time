@@ -1,22 +1,30 @@
 package co.freeside.jdbi.time
 
-import java.sql.Timestamp
-import java.time.Instant
 import spock.lang.AutoCleanup
 import spock.lang.Specification
+import spock.lang.Unroll
 import org.skife.jdbi.v2.DBI
 import org.skife.jdbi.v2.tweak.ResultSetMapper
 import org.skife.jdbi.v2.util.LongMapper
-import org.skife.jdbi.v2.util.TimestampMapper
 
-abstract class TypeSpecification<T> extends Specification {
+@Unroll
+abstract class TypeSpecification<Target, SqlType> extends Specification {
 
   @AutoCleanup protected handle = DBI.open("jdbc:h2:mem:test")
 
-  protected abstract Class<T> targetType()
+  protected abstract Class<Target> targetType()
+
   protected abstract String columnSqlType()
-  protected abstract ResultSetMapper<T> mapperForColumn(String name)
-  protected abstract ResultSetMapper<T> mapperForFirstColumn()
+
+  protected abstract ResultSetMapper<Target> mapperForColumn(String name)
+
+  protected abstract ResultSetMapper<Target> mapperForFirstColumn()
+
+  protected abstract Target targetValue()
+
+  protected abstract SqlType toSqlType(Target value)
+
+  protected abstract ResultSetMapper<SqlType> mapperForSqlTypeFirstColumn()
 
   def setup() {
     handle.createStatement("create table a_table (id bigint primary key auto_increment, value ${columnSqlType()})").execute()
@@ -26,22 +34,22 @@ abstract class TypeSpecification<T> extends Specification {
     handle.createStatement("drop table a_table if exists").execute()
   }
 
-  def "can insert an Instant to a Timestamp column"() {
+  def "can insert an #value.class.simpleName to a #expected.class.simpleName column"() {
     when:
     def id = insertAndReturnGeneratedKey(value)
 
     then:
     handle.createQuery(selectByIdSql())
       .bind("id", id)
-      .map(TimestampMapper.FIRST)
+      .map(mapperForSqlTypeFirstColumn())
       .first() == expected
 
     where:
-    value = Instant.now()
-    expected = new Timestamp(value.toEpochMilli())
+    value = targetValue()
+    expected = toSqlType(value)
   }
 
-  def "can read a Timestamp column into an Instant"() {
+  def "can read a #value.class.simpleName column into an #expected.class.simpleName"() {
     given:
     def id = insertAndReturnGeneratedKey(value)
 
@@ -55,11 +63,11 @@ abstract class TypeSpecification<T> extends Specification {
     result == expected
 
     where:
-    value = new Timestamp(System.currentTimeMillis())
-    expected = Instant.ofEpochMilli(value.time)
+    value = toSqlType(targetValue())
+    expected = targetValue()
   }
 
-  def "can read a named Timestamp column into an Instant"() {
+  def "can read a named #value.class.simpleName column into an #expected.class.simpleName"() {
     given:
     def id = insertAndReturnGeneratedKey(value)
 
@@ -73,11 +81,11 @@ abstract class TypeSpecification<T> extends Specification {
     result == expected
 
     where:
-    value = new Timestamp(System.currentTimeMillis())
-    expected = Instant.ofEpochMilli(value.time)
+    value = toSqlType(targetValue())
+    expected = targetValue()
   }
 
-  def "can read an indexed Timestamp column into an Instant"() {
+  def "can read an indexed #value.class.simpleName column into an #expected.class.simpleName"() {
     given:
     def id = insertAndReturnGeneratedKey(value)
 
@@ -91,8 +99,8 @@ abstract class TypeSpecification<T> extends Specification {
     result == expected
 
     where:
-    value = new Timestamp(System.currentTimeMillis())
-    expected = Instant.ofEpochMilli(value.time)
+    value = toSqlType(targetValue())
+    expected = targetValue()
   }
 
   protected long insertAndReturnGeneratedKey(value) {
