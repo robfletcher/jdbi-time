@@ -1,3 +1,5 @@
 = JDBI Time
 
+image::https://drone.io/github.com/robfletcher/jdbi-time/status.png[Build Status, link=https://drone.io/github.com/robfletcher/jdbi-time/latest]
+
 Provides support for Java 8's date & time API in http://jdbi.org[JDBI].
