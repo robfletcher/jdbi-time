@@ -42,6 +42,6 @@ class YearMonthSpec extends MapsToStringSpecification<YearMonth> {
 
     @Override
     protected YearMonth targetValue() {
-        YearMonth.now()
+      YearMonth.now(fixedClock)
     }
 }

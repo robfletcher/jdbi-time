@@ -45,7 +45,7 @@ class InstantSpec extends MapsToTimestampSpecification<Instant> {
 
   @Override
   protected Instant targetValue() {
-    Instant.now()
+    Instant.now(fixedClock)
   }
 
   @Override

@@ -42,6 +42,6 @@ class LocalTimeSpec extends MapsToStringSpecification<LocalTime> {
 
     @Override
     protected LocalTime targetValue() {
-        LocalTime.now()
+      LocalTime.now(fixedClock)
     }
 }

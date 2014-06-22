@@ -16,7 +16,11 @@
 
 package co.freeside.jdbi.time
 
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneId
 import spock.lang.AutoCleanup
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import org.skife.jdbi.v2.DBI
@@ -31,7 +35,8 @@ import org.skife.jdbi.v2.util.LongMapper
 @Unroll
 abstract class BaseSpecification<Target, ColumnType> extends Specification {
 
-  @AutoCleanup protected handle = DBI.open("jdbc:h2:mem:test")
+  @AutoCleanup handle = DBI.open("jdbc:h2:mem:test")
+  @Shared fixedClock = Clock.fixed(Instant.now(), ZoneId.systemDefault())
 
   /**
    * @return the +java.time+ class being tested.

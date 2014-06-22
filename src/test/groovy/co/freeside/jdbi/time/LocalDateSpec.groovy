@@ -44,6 +44,6 @@ class LocalDateSpec extends MapsToStringSpecification<LocalDate> {
 
     @Override
     protected LocalDate targetValue() {
-        LocalDate.now()
+      LocalDate.now(fixedClock)
     }
 }

@@ -42,6 +42,6 @@ class MonthDaySpec extends MapsToStringSpecification<MonthDay> {
 
     @Override
     protected MonthDay targetValue() {
-        MonthDay.now()
+      MonthDay.now(fixedClock)
     }
 }
