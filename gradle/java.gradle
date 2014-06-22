@@ -1,0 +1,23 @@
+apply plugin: "groovy"
+
+dependencies {
+  compile "org.jdbi:jdbi:$versions.jdbi"
+  testCompile "org.codehaus.groovy:groovy-all:$versions.groovy:indy"
+  testCompile "org.spockframework:spock-core:$versions.spock"
+  testRuntime "com.h2database:h2:$versions.h2"
+}
+
+plugins.withType(JavaPlugin) {
+  sourceCompatibility = "1.8"
+  targetCompatibility = "1.8"
+}
+
+tasks.withType(GroovyCompile) {
+  groovyOptions.optimizationOptions.indy = true
+}
+
+configurations.all {
+  resolutionStrategy {
+    force "org.codehaus.groovy:groovy-all:$versions.groovy:indy"
+  }
+}
