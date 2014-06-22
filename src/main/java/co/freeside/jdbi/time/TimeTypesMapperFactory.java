@@ -40,6 +40,7 @@ public class TimeTypesMapperFactory implements ResultSetMapperFactory {
     MAPPERS.put(LocalTime.class, new LocalTimeMapper());
     MAPPERS.put(MonthDay.class, new MonthDayMapper());
     MAPPERS.put(YearMonth.class, new YearMonthMapper());
+    MAPPERS.put(Duration.class, new DurationMapper());
   }
 
   public boolean accepts(Class type, StatementContext ctx) {
