@@ -1,0 +1,12 @@
+configurations {
+  asciidoclet
+}
+
+dependencies {
+  asciidoclet "org.asciidoctor:asciidoclet:0.+"
+}
+
+javadoc {
+  options.docletpath = configurations.asciidoclet.files.asType(List)
+  options.doclet = "org.asciidoctor.Asciidoclet"
+}

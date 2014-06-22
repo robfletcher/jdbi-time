@@ -14,10 +14,6 @@ repositories {
   mavenCentral()
 }
 
-configurations {
-  asciidoclet
-}
-
 version = "1.0-SNAPSHOT"
 group = "co.freeside.jdbi-time"
 
@@ -36,7 +32,6 @@ dependencies {
   testCompile "org.codehaus.groovy:groovy-all:$versions.groovy:indy"
   testCompile "org.spockframework:spock-core:$versions.spock"
   testRuntime "com.h2database:h2:$versions.h2"
-  asciidoclet "org.asciidoctor:asciidoclet:0.+"
 }
 
 plugins.withType(JavaPlugin) {
@@ -54,9 +49,6 @@ configurations.all {
   }
 }
 
-javadoc {
-  options.docletpath = configurations.asciidoclet.files.asType(List)
-  options.doclet = "org.asciidoctor.Asciidoclet"
-}
 
+apply from: "${rootDir}/gradle/asciidoclet.gradle"
 apply from: "${rootDir}/gradle/publish.gradle"
