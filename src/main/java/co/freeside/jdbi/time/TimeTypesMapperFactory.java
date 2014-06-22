@@ -19,8 +19,6 @@ package co.freeside.jdbi.time;
 import java.time.*;
 import java.util.HashMap;
 import java.util.Map;
-import org.skife.jdbi.v2.DBI;
-import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.ResultSetMapperFactory;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
@@ -28,27 +26,27 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
 /**
  * Provides mappers for all supported +java.time+ types.
  *
- * @see DBI#registerMapper(ResultSetMapperFactory)
- * @see Handle#registerMapper(ResultSetMapperFactory)
+ * @see org.skife.jdbi.v2.DBI#registerMapper(ResultSetMapperFactory)
+ * @see org.skife.jdbi.v2.Handle#registerMapper(ResultSetMapperFactory)
  */
 public class TimeTypesMapperFactory implements ResultSetMapperFactory {
 
-  private static final Map<Class, ResultSetMapper> mappers = new HashMap<>();
+  private static final Map<Class, ResultSetMapper> MAPPERS = new HashMap<>();
 
   static {
-    mappers.put(Instant.class, new InstantMapper());
-    mappers.put(LocalDate.class, new LocalDateMapper());
-    mappers.put(LocalDateTime.class, new LocalDateTimeMapper());
-    mappers.put(LocalTime.class, new LocalTimeMapper());
-    mappers.put(MonthDay.class, new MonthDayMapper());
-    mappers.put(YearMonth.class, new YearMonthMapper());
+    MAPPERS.put(Instant.class, new InstantMapper());
+    MAPPERS.put(LocalDate.class, new LocalDateMapper());
+    MAPPERS.put(LocalDateTime.class, new LocalDateTimeMapper());
+    MAPPERS.put(LocalTime.class, new LocalTimeMapper());
+    MAPPERS.put(MonthDay.class, new MonthDayMapper());
+    MAPPERS.put(YearMonth.class, new YearMonthMapper());
   }
 
   public boolean accepts(Class type, StatementContext ctx) {
-    return mappers.containsKey(type);
+    return MAPPERS.containsKey(type);
   }
 
   public ResultSetMapper mapperFor(Class type, StatementContext ctx) {
-    return mappers.get(type);
+    return MAPPERS.get(type);
   }
 }
