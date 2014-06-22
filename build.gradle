@@ -1,3 +1,12 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:2.2.3"
+  }
+}
+
 apply plugin: "groovy"
 
 repositories {
@@ -9,7 +18,11 @@ configurations {
   asciidoclet
 }
 
+version = "1.0-SNAPSHOT"
+group = "co.freeside.jdbi-time"
+
 ext {
+  isSnapshot = version.endsWith("-SNAPSHOT")
   versions = [
     groovy: "2.3.3",
     h2    : "1.4.178",
@@ -45,3 +58,5 @@ javadoc {
   options.docletpath = configurations.asciidoclet.files.asType(List)
   options.doclet = "org.asciidoctor.Asciidoclet"
 }
+
+apply from: "${rootDir}/gradle/publish.gradle"

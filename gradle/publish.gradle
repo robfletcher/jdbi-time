@@ -1,0 +1,76 @@
+apply plugin: "artifactory"
+apply plugin: "maven"
+apply from: "${rootDir}/gradle/pom.gradle"
+apply plugin: "signing"
+
+artifactory {
+  contextUrl = "http://oss.jfrog.org/"
+}
+
+task sourceJar(type: Jar) {
+  description "An archive of the source code"
+  classifier "sources"
+  from sourceSets.main.allJava, sourceSets.main.resources
+}
+
+task javadocJar(type: Jar) {
+  description "An archive of the JavaDocs"
+  classifier "javadoc"
+  from javadoc
+}
+
+artifacts {
+  archives sourceJar, javadocJar
+}
+
+signing {
+  if (!isSnapshot) {
+    sign configurations.archives
+  }
+}
+
+artifactory {
+  publish {
+    repoKey = isSnapshot ? "oss-snapshot-local" : "oss-release-local"
+    gradle.taskGraph.whenReady { taskGraph ->
+      if (taskGraph.hasTask("artifactoryPublish")) {
+        username = bintray_username
+        password = bintray_api_key
+      }
+    }
+  }
+}
+
+modifyPom {
+  project {
+    packaging "jar"
+    url "http://freeside.co/jdbi-time"
+    inceptionYear "2014"
+
+    scm {
+      url "scm:git@github.com:robfletcher/jdbi-time.git"
+      connection "scm:git@github.com:robfletcher/jdbi-time.git"
+      developerConnection "scm:git@github.com:robfletcher/jdbi-time.git"
+    }
+
+    licenses {
+      license {
+        name "The Apache Software License, Version 2.0"
+        url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        distribution "repo"
+      }
+    }
+
+    developers {
+      developer {
+        id "robfletcher"
+        name "Rob Fletcher"
+        url "http://freeside.co/"
+        roles {
+          role "Lead"
+          role "Founder"
+        }
+      }
+    }
+  }
+}
