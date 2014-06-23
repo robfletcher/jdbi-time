@@ -30,8 +30,8 @@ abstract class MapsToStringSpecification<Target> extends BaseSpecification<Targe
     StringMapper.FIRST
   }
 
-    @Override
-    protected String toColumnType(Target value) {
-        value.toString()
-    }
+  @Override
+  protected String toColumnType(Target value) {
+    value.toString()
+  }
 }

@@ -21,27 +21,23 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper
 
 class LocalTimeSpec extends MapsToStringSpecification<LocalTime> {
 
-    def setup() {
-        handle.registerArgumentFactory new TemporalAsStringArgumentFactory(LocalTime)
-    }
+  @Override
+  protected Class<LocalTime> targetType() {
+    LocalTime
+  }
 
-    @Override
-    protected Class<LocalTime> targetType() {
-        LocalTime
-    }
+  @Override
+  protected ResultSetMapper<LocalTime> targetTypeMapperFor(String name) {
+    new LocalTimeMapper(name)
+  }
 
-    @Override
-    protected ResultSetMapper<LocalTime> targetTypeMapperFor(String name) {
-        new LocalTimeMapper(name)
-    }
+  @Override
+  protected ResultSetMapper<LocalTime> targetTypeMapperForFirst() {
+    LocalTimeMapper.FIRST
+  }
 
-    @Override
-    protected ResultSetMapper<LocalTime> targetTypeMapperForFirst() {
-        LocalTimeMapper.FIRST
-    }
-
-    @Override
-    protected LocalTime targetValue() {
-      LocalTime.now(fixedClock)
-    }
+  @Override
+  protected LocalTime targetValue() {
+    LocalTime.now(fixedClock)
+  }
 }

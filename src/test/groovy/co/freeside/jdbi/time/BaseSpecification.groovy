@@ -29,8 +29,8 @@ import org.skife.jdbi.v2.util.LongMapper
 
 /**
  * Base for all specifications that test support for individual +java.time+ types.
- * @param < Target >   the +java.time+ type being tested.
- * @param < SqlType >   the simple type corresponding to the type of column.
+ * @param < Target > the +java.time+ type being tested.
+ * @param < SqlType > the simple type corresponding to the type of column.
  */
 @Unroll
 abstract class BaseSpecification<Target, ColumnType> extends Specification {
@@ -77,6 +77,7 @@ abstract class BaseSpecification<Target, ColumnType> extends Specification {
 
   def setup() {
     handle.with {
+      registerArgumentFactory new TimeTypesArgumentFactory()
       registerMapper new TimeTypesMapperFactory()
       createStatement("create table a_table (id bigint primary key auto_increment, value ${columnSqlType()})").execute()
     }
@@ -92,9 +93,9 @@ abstract class BaseSpecification<Target, ColumnType> extends Specification {
 
     then:
     handle.createQuery(selectByIdSql())
-      .bind("id", id)
-      .map(columnTypeMapperForFirst())
-      .first() == expected
+        .bind("id", id)
+        .map(columnTypeMapperForFirst())
+        .first() == expected
 
     where:
     value = targetValue()
@@ -107,9 +108,9 @@ abstract class BaseSpecification<Target, ColumnType> extends Specification {
 
     when:
     def result = handle.createQuery(selectByIdSql())
-      .bind("id", id)
-      .mapTo(targetType())
-      .first()
+        .bind("id", id)
+        .mapTo(targetType())
+        .first()
 
     then:
     result == expected
@@ -125,9 +126,9 @@ abstract class BaseSpecification<Target, ColumnType> extends Specification {
 
     when:
     def result = handle.createQuery(selectByIdSql())
-      .bind("id", id)
-      .map(targetTypeMapperFor("value"))
-      .first()
+        .bind("id", id)
+        .map(targetTypeMapperFor("value"))
+        .first()
 
     then:
     result == expected
@@ -143,9 +144,9 @@ abstract class BaseSpecification<Target, ColumnType> extends Specification {
 
     when:
     def result = handle.createQuery(selectByIdSql())
-      .bind("id", id)
-      .map(targetTypeMapperForFirst())
-      .first()
+        .bind("id", id)
+        .map(targetTypeMapperForFirst())
+        .first()
 
     then:
     result == expected
@@ -157,9 +158,9 @@ abstract class BaseSpecification<Target, ColumnType> extends Specification {
 
   protected long insertAndReturnGeneratedKey(value) {
     handle.createStatement(insertSql())
-      .bind("value", value)
-      .executeAndReturnGeneratedKeys(LongMapper.FIRST)
-      .first()
+        .bind("value", value)
+        .executeAndReturnGeneratedKeys(LongMapper.FIRST)
+        .first()
   }
 
   protected String insertSql() {

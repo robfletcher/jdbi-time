@@ -21,10 +21,6 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper
 
 class PeriodSpec extends MapsToStringSpecification<Period> {
 
-  def setup() {
-    handle.registerArgumentFactory new PeriodArgumentFactory()
-  }
-
   @Override
   protected Class<Period> targetType() {
     Period

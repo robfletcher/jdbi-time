@@ -26,3 +26,5 @@ apply from: "$rootDir/gradle/compile.gradle"
 apply from: "$rootDir/gradle/asciidoclet.gradle"
 apply from: "$rootDir/gradle/checkstyle.gradle"
 apply from: "$rootDir/gradle/publish.gradle"
+
+defaultTasks "build"

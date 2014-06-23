@@ -21,27 +21,23 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper
 
 class MonthDaySpec extends MapsToStringSpecification<MonthDay> {
 
-    def setup() {
-        handle.registerArgumentFactory new TemporalAsStringArgumentFactory(MonthDay)
-    }
+  @Override
+  protected Class<MonthDay> targetType() {
+    MonthDay
+  }
 
-    @Override
-    protected Class<MonthDay> targetType() {
-        MonthDay
-    }
+  @Override
+  protected ResultSetMapper<MonthDay> targetTypeMapperFor(String name) {
+    new MonthDayMapper(name)
+  }
 
-    @Override
-    protected ResultSetMapper<MonthDay> targetTypeMapperFor(String name) {
-        new MonthDayMapper(name)
-    }
+  @Override
+  protected ResultSetMapper<MonthDay> targetTypeMapperForFirst() {
+    MonthDayMapper.FIRST
+  }
 
-    @Override
-    protected ResultSetMapper<MonthDay> targetTypeMapperForFirst() {
-        MonthDayMapper.FIRST
-    }
-
-    @Override
-    protected MonthDay targetValue() {
-      MonthDay.now(fixedClock)
-    }
+  @Override
+  protected MonthDay targetValue() {
+    MonthDay.now(fixedClock)
+  }
 }

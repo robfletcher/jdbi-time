@@ -21,27 +21,23 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper
 
 class YearMonthSpec extends MapsToStringSpecification<YearMonth> {
 
-    def setup() {
-        handle.registerArgumentFactory new TemporalAsStringArgumentFactory(YearMonth)
-    }
+  @Override
+  protected Class<YearMonth> targetType() {
+    YearMonth
+  }
 
-    @Override
-    protected Class<YearMonth> targetType() {
-        YearMonth
-    }
+  @Override
+  protected ResultSetMapper<YearMonth> targetTypeMapperFor(String name) {
+    new YearMonthMapper(name)
+  }
 
-    @Override
-    protected ResultSetMapper<YearMonth> targetTypeMapperFor(String name) {
-        new YearMonthMapper(name)
-    }
+  @Override
+  protected ResultSetMapper<YearMonth> targetTypeMapperForFirst() {
+    YearMonthMapper.FIRST
+  }
 
-    @Override
-    protected ResultSetMapper<YearMonth> targetTypeMapperForFirst() {
-        YearMonthMapper.FIRST
-    }
-
-    @Override
-    protected YearMonth targetValue() {
-      YearMonth.now(fixedClock)
-    }
+  @Override
+  protected YearMonth targetValue() {
+    YearMonth.now(fixedClock)
+  }
 }

@@ -22,12 +22,6 @@ import org.skife.jdbi.v2.util.LongMapper
 
 class DurationSpec extends BaseSpecification<Duration, Long> {
 
-  def setup() {
-    handle.with {
-      registerArgumentFactory new DurationArgumentFactory()
-    }
-  }
-
   @Override
   protected Class<Duration> targetType() {
     Duration

@@ -22,12 +22,6 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper
 
 class InstantSpec extends MapsToTimestampSpecification<Instant> {
 
-  def setup() {
-    handle.with {
-      registerArgumentFactory new InstantArgumentFactory()
-    }
-  }
-
   @Override
   protected Class<Instant> targetType() {
     Instant
