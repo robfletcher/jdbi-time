@@ -3,3 +3,44 @@
 image::https://drone.io/github.com/robfletcher/jdbi-time/status.png[Build Status, link=https://drone.io/github.com/robfletcher/jdbi-time/latest]
 
 Provides support for Java 8's date & time API in http://jdbi.org[JDBI].
+
+== Installation
+
+Releases are hosted on https://bintray.com/bintray/jcenter[JCenter] and snapshots are hosted on oss.jfrog.org.
+
+=== Via Gradle
+
+[source,groovy]
+--
+repositories {
+  jcenter()
+  maven { url "http://oss.jfrog.org/artifactory/repo" } // only if you need snapshots
+}
+dependencies {
+  compile "co.freeside.jdbi-time:jdbi-time:1.0"
+}
+--
+
+=== Via Maven
+
+[source,xml]
+--
+<repository>
+  <id>central</id>
+  <name>bintray</name>
+  <url>http://jcenter.bintray.com</url>
+</repository>
+
+<!-- only if you need snapshots -->
+<repository>
+  <id>ojo</id>
+  <name>JFrog OSS</name>
+  <url>http://oss.jfrog.org/artifactory/repo</url>
+</repository>
+
+<dependency>
+  <groupId>co.freeside.jdbi-time</groupId>
+  <artifactId>jdbi-time</artifactId>
+  <version>1.0</version>
+</dependency>
+--

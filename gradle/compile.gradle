@@ -13,6 +13,7 @@ plugins.withType(JavaPlugin) {
 }
 
 tasks.withType(GroovyCompile) {
+  compileGroovy.options.encoding = "UTF-8"
   groovyOptions.optimizationOptions.indy = true
 }
 

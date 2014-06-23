@@ -12,9 +12,6 @@ repositories {
   mavenCentral()
 }
 
-version = "1.0-SNAPSHOT"
-group = "co.freeside.jdbi-time"
-
 ext {
   isSnapshot = version.endsWith("-SNAPSHOT")
   versions = [
@@ -25,7 +22,7 @@ ext {
   ]
 }
 
-apply from: "${rootDir}/gradle/java.gradle"
+apply from: "${rootDir}/gradle/compile.gradle"
 apply from: "${rootDir}/gradle/asciidoclet.gradle"
 apply from: "${rootDir}/gradle/checkstyle.gradle"
 apply from: "${rootDir}/gradle/publish.gradle"

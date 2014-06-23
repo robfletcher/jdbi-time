@@ -1,11 +1,5 @@
-apply plugin: "artifactory"
-apply plugin: "maven"
-apply from: "${rootDir}/gradle/pom.gradle"
-apply plugin: "signing"
-
-artifactory {
-  contextUrl = "http://oss.jfrog.org/"
-}
+apply plugin: "artifactory-publish"
+apply plugin: "maven-publish"
 
 task sourceJar(type: Jar) {
   description "An archive of the source code"
@@ -23,53 +17,68 @@ artifacts {
   archives sourceJar, javadocJar
 }
 
-signing {
-  if (!isSnapshot) {
-    sign configurations.archives
-  }
-}
-
 artifactory {
+  contextUrl = "http://oss.jfrog.org/"
   publish {
-    repoKey = isSnapshot ? "oss-snapshot-local" : "oss-release-local"
-    gradle.taskGraph.whenReady { taskGraph ->
-      if (taskGraph.hasTask("artifactoryPublish")) {
-        username = bintray_username
-        password = bintray_api_key
-      }
+    repository {
+      repoKey = isSnapshot ? "oss-snapshot-local" : "oss-release-local"
+      username = bintray_username
+      password = bintray_api_key
+    }
+    defaults {
+      publications("mavenCustom")
+    }
+  }
+  resolve {
+    repository {
+      repoKey = "libs-release"
     }
   }
 }
 
-modifyPom {
-  project {
-    packaging "jar"
-    url "http://freeside.co/jdbi-time"
-    inceptionYear "2014"
-
-    scm {
-      url "scm:git@github.com:robfletcher/jdbi-time.git"
-      connection "scm:git@github.com:robfletcher/jdbi-time.git"
-      developerConnection "scm:git@github.com:robfletcher/jdbi-time.git"
+def pomConfig = {
+  name project.name
+  description project.pomDescription
+  url "http://git.io/jdbi-time"
+  inceptionYear "2014"
+  licenses {
+    license([:]) {
+      name "The Apache Software License, Version 2.0"
+      url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+      distribution "repo"
     }
-
-    licenses {
-      license {
-        name "The Apache Software License, Version 2.0"
-        url "http://www.apache.org/licenses/LICENSE-2.0.txt"
-        distribution "repo"
-      }
-    }
-
-    developers {
+  }
+  scm {
+    url "https://github.com/$project.gitHubProject"
+    connection "https://github.com/${project.gitHubProject}.git"
+    developerConnection "scm:git@github.com:${project.gitHubProject}.git"
+  }
+  developers {
       developer {
         id "robfletcher"
         name "Rob Fletcher"
         url "http://freeside.co/"
         roles {
-          role "Lead"
-          role "Founder"
+          role "Developer"
         }
+    }
+  }
+}
+
+publishing {
+  publications {
+    mavenCustom(MavenPublication) {
+      from components.java
+      artifact sourceJar
+      artifact javadocJar
+
+      pom.withXml {
+        asNode().dependencies.dependency.each { dep ->
+          if (dep.scope.text() in ["runtime", "test"]) {
+            dep.remove(dep.scope)
+          }
+        }
+        asNode().children().last() + pomConfig
       }
     }
   }
