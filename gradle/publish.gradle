@@ -1,5 +1,6 @@
 apply plugin: "artifactory-publish"
 apply plugin: "maven-publish"
+apply from: "$rootDir/gradle/credentials.gradle"
 
 task sourceJar(type: Jar) {
   description "An archive of the source code"
@@ -22,8 +23,8 @@ artifactory {
   publish {
     repository {
       repoKey = isSnapshot ? "oss-snapshot-local" : "oss-release-local"
-      username = bintray_username
-      password = bintray_api_key
+      username = bintrayUsername
+      password = bintrayApiKey
     }
     defaults {
       publications("mavenCustom")
