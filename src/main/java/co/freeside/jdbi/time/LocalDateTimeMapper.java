@@ -21,17 +21,40 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import org.skife.jdbi.v2.util.TypedMapper;
 
+/**
+ * A +ResultSetMapper+ for retrieving +LocalDateTime+ values from a SQL query.
+ *
+ * @see java.time.LocalDateTime
+ */
 class LocalDateTimeMapper extends TypedMapper<LocalDateTime> {
 
+  /**
+   * An instance which extracts value from the first field.
+   */
   public static final LocalDateTimeMapper FIRST = new LocalDateTimeMapper(1);
 
+  /**
+   * Create a new instance which extracts the value from the first column.
+   */
   public LocalDateTimeMapper() {
   }
 
+  /**
+   * Create a new instance which extracts the value positionally
+   * in the +ResultSet+.
+   *
+   * @param index 1 based column index into the +ResultSet+.
+   */
   public LocalDateTimeMapper(int index) {
     super(index);
   }
 
+  /**
+   * Create a new instance which extracts the value by name or alias from the
+   * +ResultSet+.
+   *
+   * @param name The name or alias for the field.
+   */
   public LocalDateTimeMapper(String name) {
     super(name);
   }

@@ -21,17 +21,40 @@ import java.sql.SQLException;
 import java.time.YearMonth;
 import org.skife.jdbi.v2.util.TypedMapper;
 
+/**
+ * A +ResultSetMapper+ for retrieving +YearMonth+ values from a SQL query.
+ *
+ * @see java.time.YearMonth
+ */
 public class YearMonthMapper extends TypedMapper<YearMonth> {
 
+  /**
+   * An instance which extracts value from the first field.
+   */
   public static final YearMonthMapper FIRST = new YearMonthMapper(1);
 
+  /**
+   * Create a new instance which extracts the value from the first column.
+   */
   public YearMonthMapper() {
   }
 
+  /**
+   * Create a new instance which extracts the value positionally
+   * in the +ResultSet+.
+   *
+   * @param index 1 based column index into the +ResultSet+.
+   */
   public YearMonthMapper(int index) {
     super(index);
   }
 
+  /**
+   * Create a new instance which extracts the value by name or alias from the
+   * +ResultSet+.
+   *
+   * @param name The name or alias for the field.
+   */
   public YearMonthMapper(String name) {
     super(name);
   }

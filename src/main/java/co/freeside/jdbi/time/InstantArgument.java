@@ -21,17 +21,23 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.Instant;
+import javax.annotation.Nullable;
 import org.skife.jdbi.v2.StatementContext;
 
 /**
- * Supports the use of +java.time.Instant+ as an argument to a SQL call.
+ * Argument that represents a {@link Instant} value as a +TIMESTAMP+.
+ *
+ * @see Types#TIMESTAMP
  */
 public class InstantArgument extends NullSafeArgument<Instant> {
 
-  InstantArgument(final Instant value) {
+  InstantArgument(@Nullable final Instant value) {
     super(value, Types.TIMESTAMP);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected void applyNotNull(int position, PreparedStatement statement, StatementContext ctx) throws SQLException {
     statement.setTimestamp(position, new Timestamp(value.toEpochMilli()));

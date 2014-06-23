@@ -21,17 +21,40 @@ import java.sql.SQLException;
 import java.time.Instant;
 import org.skife.jdbi.v2.util.TypedMapper;
 
+/**
+ * A +ResultSetMapper+ for retrieving +Instant+ values from a SQL query.
+ *
+ * @see java.time.Instant
+ */
 public class InstantMapper extends TypedMapper<Instant> {
 
+  /**
+   * An instance which extracts value from the first field.
+   */
   public static final InstantMapper FIRST = new InstantMapper(1);
 
+  /**
+   * Create a new instance which extracts the value from the first column.
+   */
   public InstantMapper() {
   }
 
+  /**
+   * Create a new instance which extracts the value positionally
+   * in the +ResultSet+.
+   *
+   * @param index 1 based column index into the +ResultSet+.
+   */
   public InstantMapper(int index) {
     super(index);
   }
 
+  /**
+   * Create a new instance which extracts the value by name or alias from the
+   * +ResultSet+.
+   *
+   * @param name The name or alias for the field.
+   */
   public InstantMapper(String name) {
     super(name);
   }

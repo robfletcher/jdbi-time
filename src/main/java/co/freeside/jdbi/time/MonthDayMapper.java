@@ -21,17 +21,40 @@ import java.sql.SQLException;
 import java.time.MonthDay;
 import org.skife.jdbi.v2.util.TypedMapper;
 
+/**
+ * A +ResultSetMapper+ for retrieving +MonthDay+ values from a SQL query.
+ *
+ * @see java.time.MonthDay
+ */
 public class MonthDayMapper extends TypedMapper<MonthDay> {
 
+  /**
+   * An instance which extracts value from the first field.
+   */
   public static final MonthDayMapper FIRST = new MonthDayMapper(1);
 
+  /**
+   * Create a new instance which extracts the value from the first column.
+   */
   public MonthDayMapper() {
   }
 
+  /**
+   * Create a new instance which extracts the value positionally
+   * in the +ResultSet+.
+   *
+   * @param index 1 based column index into the +ResultSet+.
+   */
   public MonthDayMapper(int index) {
     super(index);
   }
 
+  /**
+   * Create a new instance which extracts the value by name or alias from the
+   * +ResultSet+.
+   *
+   * @param name The name or alias for the field.
+   */
   public MonthDayMapper(String name) {
     super(name);
   }
