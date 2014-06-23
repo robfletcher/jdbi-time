@@ -22,25 +22,18 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.Instant;
 import org.skife.jdbi.v2.StatementContext;
-import org.skife.jdbi.v2.tweak.Argument;
 
 /**
  * Supports the use of +java.time.Instant+ as an argument to a SQL call.
  */
-public class InstantArgument implements Argument {
-
-  private final Instant value;
+public class InstantArgument extends NullSafeArgument<Instant> {
 
   InstantArgument(final Instant value) {
-    this.value = value;
+    super(value, Types.TIMESTAMP);
   }
 
   @Override
-  public void apply(final int position, final PreparedStatement statement, final StatementContext ctx) throws SQLException {
-    if (value == null) {
-      statement.setNull(position, Types.TIMESTAMP);
-    } else {
-      statement.setTimestamp(position, new Timestamp(value.toEpochMilli()));
-    }
+  protected void applyNotNull(int position, PreparedStatement statement, StatementContext ctx) throws SQLException {
+    statement.setTimestamp(position, new Timestamp(value.toEpochMilli()));
   }
 }

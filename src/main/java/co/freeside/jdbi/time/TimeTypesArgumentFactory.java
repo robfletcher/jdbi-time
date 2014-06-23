@@ -17,7 +17,6 @@
 package co.freeside.jdbi.time;
 
 import java.time.*;
-import java.time.temporal.TemporalAccessor;
 import java.util.Collection;
 import java.util.HashSet;
 import org.skife.jdbi.v2.StatementContext;
@@ -50,12 +49,8 @@ public class TimeTypesArgumentFactory implements ArgumentFactory<Object> {
       return new InstantArgument((Instant) value);
     } else if (expectedType.equals(Duration.class)) {
       return new DurationArgument((Duration) value);
-    } else if (expectedType.equals(Period.class)) {
-      return new PeriodArgument((Period) value);
-    } else if (TemporalAccessor.class.isAssignableFrom(expectedType)) {
-      return TemporalAsStringArgument.of((TemporalAccessor) value);
     } else {
-      throw new IllegalArgumentException(String.format("%s is not a supported type", expectedType));
+      return ToStringArgument.of(value);
     }
   }
 }

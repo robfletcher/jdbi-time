@@ -19,24 +19,27 @@ package co.freeside.jdbi.time;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.time.Period;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.Argument;
 
-public class PeriodArgument implements Argument {
+/**
+ * An +Argument+ implementation for any type that is represented as a +varchar+
+ * value on the database based on the object's +toString+ method.
+ *
+ * @param <T> the specific type.
+ */
+public class ToStringArgument<T> extends NullSafeArgument<T> {
 
-  public PeriodArgument(Period value) {
-    this.value = value;
+  public static <T> Argument of(T type) {
+    return new ToStringArgument<>(type);
   }
 
-  private final Period value;
+  public ToStringArgument(T value) {
+    super(value, Types.VARCHAR);
+  }
 
   @Override
-  public void apply(int position, PreparedStatement statement, StatementContext ctx) throws SQLException {
-    if (value == null) {
-      statement.setNull(position, Types.VARCHAR);
-    } else {
-      statement.setString(position, value.toString());
-    }
+  protected void applyNotNull(int position, PreparedStatement statement, StatementContext ctx) throws SQLException {
+    statement.setString(position, value.toString());
   }
 }

@@ -21,22 +21,15 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.time.Duration;
 import org.skife.jdbi.v2.StatementContext;
-import org.skife.jdbi.v2.tweak.Argument;
 
-public class DurationArgument implements Argument {
-
-  private final Duration value;
+public class DurationArgument extends NullSafeArgument<Duration> {
 
   public DurationArgument(Duration value) {
-    this.value = value;
+    super(value, Types.BIGINT);
   }
 
   @Override
-  public void apply(int position, PreparedStatement statement, StatementContext ctx) throws SQLException {
-    if (value == null) {
-      statement.setNull(position, Types.BIGINT);
-    } else {
-      statement.setLong(position, value.toMillis());
-    }
+  protected void applyNotNull(int position, PreparedStatement statement, StatementContext ctx) throws SQLException {
+    statement.setLong(position, value.toMillis());
   }
 }

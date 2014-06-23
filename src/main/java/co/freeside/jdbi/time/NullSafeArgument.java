@@ -18,34 +18,27 @@ package co.freeside.jdbi.time;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Types;
-import java.time.temporal.TemporalAccessor;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.Argument;
 
-/**
- * An +Argument+ implementation for any +TemporalAccessor+ type that is
- * represented as a string column on the database.
- *
- * @param <T> the specific +TemporalAccessor+ type.
- */
-public class TemporalAsStringArgument<T extends TemporalAccessor> implements Argument {
+public abstract class NullSafeArgument<T> implements Argument {
 
-  public static <T extends TemporalAccessor> Argument of(T type) {
-    return new TemporalAsStringArgument<>(type);
-  }
+  protected final T value;
+  private final int sqlType;
 
-  private final T value;
-
-  public TemporalAsStringArgument(T value) {
+  protected NullSafeArgument(T value, int sqlType) {
     this.value = value;
+    this.sqlType = sqlType;
   }
 
+  @Override
   public void apply(int position, PreparedStatement statement, StatementContext ctx) throws SQLException {
     if (value == null) {
-      statement.setNull(position, Types.VARCHAR);
+      statement.setNull(position, sqlType);
     } else {
-      statement.setString(position, value.toString());
+      applyNotNull(position, statement, ctx);
     }
   }
+
+  protected abstract void applyNotNull(int position, PreparedStatement statement, StatementContext ctx) throws SQLException;
 }
