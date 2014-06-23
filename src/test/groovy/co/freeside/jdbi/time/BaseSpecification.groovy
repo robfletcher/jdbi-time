@@ -29,6 +29,7 @@ import org.skife.jdbi.v2.util.LongMapper
 
 /**
  * Base for all specifications that test support for individual +java.time+ types.
+ *
  * @param < Target > the +java.time+ type being tested.
  * @param < SqlType > the simple type corresponding to the type of column.
  */
@@ -37,6 +38,10 @@ abstract class BaseSpecification<Target, ColumnType> extends Specification {
 
   @AutoCleanup handle = DBI.open("jdbc:h2:mem:test")
   @Shared fixedClock = Clock.fixed(Instant.now(), ZoneId.systemDefault())
+
+  private static final String DROP_TABLE_SQL = "drop table a_table if exists"
+  private static final String INSERT_SQL = "insert into a_table (value) values (:value)"
+  private static final String SELECT_BY_ID_SQL = "select value from a_table where id = :id"
 
   /**
    * @return the +java.time+ class being tested.
@@ -84,7 +89,7 @@ abstract class BaseSpecification<Target, ColumnType> extends Specification {
   }
 
   def cleanup() {
-    handle.createStatement("drop table a_table if exists").execute()
+    handle.createStatement(DROP_TABLE_SQL).execute()
   }
 
   def "can insert an #value.class.simpleName to a #expected.class.simpleName column"() {
@@ -92,10 +97,10 @@ abstract class BaseSpecification<Target, ColumnType> extends Specification {
     def id = insertAndReturnGeneratedKey(value)
 
     then:
-    handle.createQuery(selectByIdSql())
-        .bind("id", id)
-        .map(columnTypeMapperForFirst())
-        .first() == expected
+    handle.createQuery(SELECT_BY_ID_SQL)
+      .bind("id", id)
+      .map(columnTypeMapperForFirst())
+      .first() == expected
 
     where:
     value = targetValue()
@@ -107,10 +112,10 @@ abstract class BaseSpecification<Target, ColumnType> extends Specification {
     def id = insertAndReturnGeneratedKey(value)
 
     when:
-    def result = handle.createQuery(selectByIdSql())
-        .bind("id", id)
-        .mapTo(targetType())
-        .first()
+    def result = handle.createQuery(SELECT_BY_ID_SQL)
+      .bind("id", id)
+      .mapTo(targetType())
+      .first()
 
     then:
     result == expected
@@ -125,10 +130,10 @@ abstract class BaseSpecification<Target, ColumnType> extends Specification {
     def id = insertAndReturnGeneratedKey(value)
 
     when:
-    def result = handle.createQuery(selectByIdSql())
-        .bind("id", id)
-        .map(targetTypeMapperFor("value"))
-        .first()
+    def result = handle.createQuery(SELECT_BY_ID_SQL)
+      .bind("id", id)
+      .map(targetTypeMapperFor("value"))
+      .first()
 
     then:
     result == expected
@@ -143,10 +148,10 @@ abstract class BaseSpecification<Target, ColumnType> extends Specification {
     def id = insertAndReturnGeneratedKey(value)
 
     when:
-    def result = handle.createQuery(selectByIdSql())
-        .bind("id", id)
-        .map(targetTypeMapperForFirst())
-        .first()
+    def result = handle.createQuery(SELECT_BY_ID_SQL)
+      .bind("id", id)
+      .map(targetTypeMapperForFirst())
+      .first()
 
     then:
     result == expected
@@ -157,17 +162,9 @@ abstract class BaseSpecification<Target, ColumnType> extends Specification {
   }
 
   protected long insertAndReturnGeneratedKey(value) {
-    handle.createStatement(insertSql())
-        .bind("value", value)
-        .executeAndReturnGeneratedKeys(LongMapper.FIRST)
-        .first()
-  }
-
-  protected String insertSql() {
-    "insert into a_table (value) values (:value)"
-  }
-
-  protected String selectByIdSql() {
-    "select value from a_table where id = :id"
+    handle.createStatement(INSERT_SQL)
+      .bind("value", value)
+      .executeAndReturnGeneratedKeys(LongMapper.FIRST)
+      .first()
   }
 }
