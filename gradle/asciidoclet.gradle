@@ -9,4 +9,9 @@ dependencies {
 javadoc {
   options.docletpath = configurations.asciidoclet.files.asType(List)
   options.doclet = "org.asciidoctor.Asciidoclet"
+
+  options.author = true
+  options.windowTitle = "$project.pomDescription $version"
+  options.docTitle = "$project.pomDescription $version"
+  options.links = ["http://jdbi.org/apidocs/", "http://docs.oracle.com/javase/8/docs/api/"]
 }
