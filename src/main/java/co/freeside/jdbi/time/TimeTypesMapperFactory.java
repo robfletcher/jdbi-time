@@ -42,6 +42,7 @@ public class TimeTypesMapperFactory implements ResultSetMapperFactory {
     MAPPERS.put(YearMonth.class, new YearMonthMapper());
     MAPPERS.put(Duration.class, new DurationMapper());
     MAPPERS.put(Period.class, new PeriodMapper());
+    MAPPERS.put(ZoneId.class, new ZoneIdMapper());
   }
 
   public boolean accepts(Class type, StatementContext ctx) {

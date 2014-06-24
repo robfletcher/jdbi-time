@@ -25,7 +25,7 @@ import org.skife.jdbi.v2.tweak.ArgumentFactory;
 
 public class TimeTypesArgumentFactory implements ArgumentFactory<Object> {
 
-  private static final Collection<Class> SUPPORTED_TYPES = new HashSet<>();
+  private static final Collection<Class<?>> SUPPORTED_TYPES = new HashSet<>();
 
   static {
     SUPPORTED_TYPES.add(Instant.class);
@@ -36,11 +36,12 @@ public class TimeTypesArgumentFactory implements ArgumentFactory<Object> {
     SUPPORTED_TYPES.add(YearMonth.class);
     SUPPORTED_TYPES.add(Duration.class);
     SUPPORTED_TYPES.add(Period.class);
+    SUPPORTED_TYPES.add(ZoneId.class);
   }
 
   @Override
-  public boolean accepts(Class<?> expectedType, Object value, StatementContext ctx) {
-    return SUPPORTED_TYPES.contains(value.getClass());
+  public boolean accepts(final Class<?> expectedType, Object value, StatementContext ctx) {
+    return SUPPORTED_TYPES.stream().anyMatch(it -> it.isAssignableFrom(expectedType));
   }
 
   @Override
