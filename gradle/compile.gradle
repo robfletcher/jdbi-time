@@ -18,9 +18,3 @@ tasks.withType(GroovyCompile) {
   compileGroovy.options.encoding = "UTF-8"
   groovyOptions.optimizationOptions.indy = true
 }
-
-configurations.all {
-  resolutionStrategy {
-    force "org.codehaus.groovy:groovy-all:$versions.groovy:indy"
-  }
-}
