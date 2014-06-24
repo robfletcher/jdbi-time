@@ -3,7 +3,9 @@ apply plugin: "groovy"
 dependencies {
   compile "org.jdbi:jdbi:$versions.jdbi"
   testCompile "org.codehaus.groovy:groovy-all:$versions.groovy:indy"
-  testCompile "org.spockframework:spock-core:$versions.spock"
+  testCompile("org.spockframework:spock-core:$versions.spock") {
+    exclude module: "groovy-all"
+  }
   testRuntime "com.h2database:h2:$versions.h2"
 }
 
