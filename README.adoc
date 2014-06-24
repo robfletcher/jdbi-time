@@ -63,11 +63,13 @@ You can do the same on an individual +Handle+ if that's what you need.
 |Class |Column type |Example
 
 |+java.time.Duration+ |+BIGINT+ |+3600000+
-|+java.time.Instant+ |+TIMESTAMP+ |+1403528110746+
+|+java.time.Instant+ |+TIMESTAMP+ |+1403528189819+
 |+java.time.LocalDate+ |+VARCHAR+ |+'2014-06-23'+
 |+java.time.LocalDateTime+ |+VARCHAR+ |+'2014-06-23T13:56:29.819'+
 |+java.time.LocalTime+ |+VARCHAR+ |+'13:56:29.819'+
 |+java.time.MonthDay+ |+VARCHAR+ |+'--06-23'+
 |+java.time.Period+ |+VARCHAR+ |+'P1Y2M3D'+
 |+java.time.YearMonth+ |+VARCHAR+ |+'2014-06'+
+|+java.time.ZoneId+ |+VARCHAR+ |+'Europe/London'+
+|+java.time.ZonedDateTime+ |+VARCHAR+ |+'2014-06-23T13:56:29.819+01:00[Europe/London]'+
 |===

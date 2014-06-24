@@ -37,6 +37,7 @@ public class TimeTypesArgumentFactory implements ArgumentFactory<Object> {
     SUPPORTED_TYPES.add(Duration.class);
     SUPPORTED_TYPES.add(Period.class);
     SUPPORTED_TYPES.add(ZoneId.class);
+    SUPPORTED_TYPES.add(ZonedDateTime.class);
   }
 
   @Override

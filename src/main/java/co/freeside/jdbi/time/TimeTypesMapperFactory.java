@@ -43,6 +43,7 @@ public class TimeTypesMapperFactory implements ResultSetMapperFactory {
     MAPPERS.put(Duration.class, new DurationMapper());
     MAPPERS.put(Period.class, new PeriodMapper());
     MAPPERS.put(ZoneId.class, new ZoneIdMapper());
+    MAPPERS.put(ZonedDateTime.class, new ZonedDateTimeMapper());
   }
 
   public boolean accepts(Class type, StatementContext ctx) {
