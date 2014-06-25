@@ -17,7 +17,7 @@ repositories {
   maven { url "http://oss.jfrog.org/artifactory/repo" } // only if you need snapshots
 }
 dependencies {
-  compile "co.freeside.jdbi-time:jdbi-time:1.0"
+  compile "co.freeside.jdbi-time:jdbi-time:1.1"
 }
 --
 
@@ -41,7 +41,7 @@ dependencies {
 <dependency>
   <groupId>co.freeside.jdbi-time</groupId>
   <artifactId>jdbi-time</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 --
 
